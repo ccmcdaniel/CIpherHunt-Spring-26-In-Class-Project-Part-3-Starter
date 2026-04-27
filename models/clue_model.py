@@ -61,15 +61,32 @@ class ClueModel:
 
     # Instructor Completes This
     def GetCurrentClue(self):
-        return self.__clue_data[self.__current_clue_index]
+        if(self.__current_clue_index != -1):
+            return self.__clue_data[self.__current_clue_index]
+        else:
+            return None
 
     # Instructor Completes This
     def FetchNewClue(self):
-        result = random.randint(0, len(self.__clue_data) - 1)
+        unsolved_clues = self.GetUnsolvedClues()
 
-        while(result == self.__current_clue_index):
-            result = random.randint(0, len(self.__clue_data) - 1)
-        return self.__clue_data[result]
+        if len(unsolved_clues) == 0:
+            self.__current_clue_index = -1
+            return None
+        
+        elif len(unsolved_clues) == 1:
+            self.__current_clue_index = 0
+            return self.__clue_data[unsolved_clues[0]]
+        
+        else:
+            index = random.choice(unsolved_clues)
+
+            while(index == self.__current_clue_index):
+                index = random.choice(unsolved_clues)
+
+            self.__current_clue_index = index
+            return self.__clue_data[index]
+        
 
     # Instructor Completes This
     def GetClueUsername(self):
@@ -86,9 +103,21 @@ class ClueModel:
     def AttemptCurrentClueSolve(self, key):
         if(key == self.__clue_data[self.__current_clue_index].key):
             self.__clue_data[self.__current_clue_index].is_solved = True
+            self.FetchNewClue()
             return True
         else:
             return False
+        
+    # this function is temporary until we can connect to the DB.
+    def GetUnsolvedClues(self):
+        result = []
+        
+        for i in range(len(self.__clue_data)):
+            if self.__clue_data[i].is_solved == False:
+                result.append(i)
+
+        return result
+
 
 
 if __name__ == "__main__":
