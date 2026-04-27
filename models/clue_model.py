@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+import random
 
 @dataclass
 class Clue:
@@ -17,9 +18,7 @@ class ClueModel:
         self.FetchNewClue()
 
     def GenerateClues(self):
-        # Sample dataset for "CipherHunt" 
-        # Format: [Clue, Secret Key, Hint]
-        clues = [
+        sample_clues = [
             [
                 "I have keys but no locks. I have a space but no room. You can enter, but never leave.", 
                 "Keyboard"
@@ -50,51 +49,46 @@ class ClueModel:
             ]
         ]
 
-        self.__db.GenerateClues(clues)
+        self.__clue_data = []
+        self.__id_counter = 1
+        for clue in sample_clues:
+            clue_obj =  Clue(self.__id_counter, 1, clue[0], clue[1], datetime.now(), False)
+            self.__clue_data.append(clue_obj)
+            self.__id_counter += 1
+
+        self.__current_clue_index = -1
 
 
     def GetCurrentClue(self):
-        if(self.__current_clue == None):
-            self.FetchNewClue()
+        return self.__clue_data[self.__current_clue_index]
 
-        return self.__current_clue
-    
+
     def FetchNewClue(self):
-        result = self.__db.GetRandomClue()
+        result = random.randint(0, len(self.__clue_data) - 1)
 
-        if(result):
-            date = datetime.strptime(result[4], "%Y-%m-%d %H:%M:%S")
-            self.__current_clue = Clue(result[0], result[1], result[2], result[3], date, result[5])
-        else:
-            self.__current_clue = None
+        while(result == self.__current_clue_index):
+            result = random.randint(0, len(self.__clue_data) - 1)
+        return self.__clue_data[result]
 
-        return self.__current_clue
-    
+
     def GetClueUsername(self):
-        result = self.__db.GetUserByID(self.__current_clue.user_id)
+        return "guest"
 
-        if result:
-            return result[1]
-        else:
-            return None
-    
+
     def AddClue(self, clue_text, key, user_id):
-        result = self.__db.AddClue(user_id, clue_text, key)
+        clue_obj = Clue(self.__id_counter, user_id, clue_text, key, datetime.now(), False)
+        self.__clue_data.append(clue_obj)
+        self.__id_counter += 1
+        return True
 
-        if result:
-            return True
-        else:
-            return False
-        
+
     def AttemptCurrentClueSolve(self, key):
-        result = self.__db.AttemptSolveClue(self.__current_clue.id, key)
-        
-        if(result):
+        if(key == self.__clue_data[self.__current_clue_index].key):
+            self.__clue_data[self.__current_clue_index].is_solved = True
             return True
         else:
             return False
 
-     
 
 if __name__ == "__main__":
     model = ClueModel()
