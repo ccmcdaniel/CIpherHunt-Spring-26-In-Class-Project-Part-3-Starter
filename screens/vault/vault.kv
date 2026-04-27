@@ -1,0 +1,53 @@
+#:kivy 1.0
+#:import utils kivy.utils
+
+<VaultScreen>:
+    txtAnswerInput: txtAnswerInput
+    lblFeedbackLabel: lblFeedbackLabel
+
+    BoxLayout:
+        padding: 5
+        orientation: 'vertical'
+        padding: 17
+        spacing: 5
+
+        ContentBox:
+            title_text: f"[b][size=32sp]Created By:[/size]\n[size=20sp]{root.username}, {root.date}[/size][/b]"
+
+            BoxLayout:
+                orientation: 'vertical'            
+                padding: [10]
+                spacing: 20
+
+                Label:
+                    text: root.clue_text
+                    text_size: (self.width, None)
+                    halign: 'center'
+                    valign: 'middle'
+                    color: utils.get_color_from_hex("#ffffff")
+                    font_size: '36sp'
+
+                TextBox:
+                    id: txtAnswerInput
+                    hint_text: "Answer"
+                
+                AppButton:
+                    text: "Submit"
+                    on_release: root.on_click_submit()
+
+                AppButton:
+                    text: "Fetch Clue"
+                    on_release: root.on_click_fetch_clue()
+
+
+        Label:
+            id: lblFeedbackLabel
+            color: utils.get_color_from_hex("#000000")
+            font_size: '24sp'
+            valign: 'middle'
+            padding: [20] if self.text != '' else [0]
+            text_size: self.size
+            halign: 'center'
+
+            size_hint: (1, None)
+            height: self.texture_size[1] if self.text != '' else 0        

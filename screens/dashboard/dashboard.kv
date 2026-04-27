@@ -1,0 +1,67 @@
+#:kivy 1.0
+#:import utils kivy.utils
+
+<DashboardScreen>:
+    BoxLayout:
+        padding: 5
+        orientation: 'vertical'
+
+        Label:
+            text: f"[b]Welcome Back,\n{root.username}[/b]"
+            markup: True
+            size_hint: (1, None)
+            height: '100dp'
+            font_size: '32sp'
+            text_size: self.size
+            halign: 'center'
+
+        Label:
+            text: f"[b]Rank: {root.rank}[/b]"
+            markup: True
+            size_hint: (1, None)
+            height: '150dp'
+            font_size: '32sp'
+
+        BoxLayout:
+            size_hint: (None, None)
+            size: ('370dp', '30dp')
+            pos_hint: {'center_x': 0.5}
+
+            canvas.before:
+                Color:
+                    rgba: progress_bar_color_1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [11]
+
+                Color:
+                    rgba: progress_bar_color_2
+                RoundedRectangle:
+                    size: (self.width * root.rank_percent_complete, self.height)
+                    pos: self.pos
+                    # top-left, top-right, bottom-right, bottom-left
+                    radius: [11, 0, 0, 11]
+                
+        Label:
+            text: f"[b]{root.rank_points}/{root.next_rank_points}[/b]"
+            markup: True
+            size_hint: (1, None)
+            height: '50dp'
+            font_size: '32sp'
+
+        Label:
+            text: "Earn points by successfully solving clues and creating new ciphers!\n\nSolving a clue: 5 pts\nCreating New Clues: 10 pts"
+            markup: True
+            text_size: self.width, None
+            halign: 'center'
+            valign: 'middle'
+            pos_hint: {'center_x': 0.5}
+            size_hint: (0.8, None)
+            height: '300dp'
+            font_size: '22sp'
+
+        Widget:
+
+        
+        

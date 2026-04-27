@@ -1,0 +1,98 @@
+#:kivy 1.0
+#:import utils kivy.utils
+<AppShell>:
+    orientation: 'vertical'
+    screen_manager: screen_manager
+    tabs: tabs
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        height: '60dp'
+        padding: (10, 0)
+        spacing: 10
+
+        canvas.before:
+            Color: 
+                rgba: utils.get_color_from_hex("#EBF1FF")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Image:
+            source: app.resource_path + "\\icons\\key-solid.png"
+            size_hint: (None, None)
+            size: ('30dp', '30dp')
+            pos_hint: {'center_y': 0.5}
+            fit_mode: 'contain'
+
+        Label:
+            text: "[b]CipherHunt[/b]"
+            font_size: '20sp'
+            markup: True
+            color: global_text_color
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+
+        Button:
+            size_hint: (None, None)
+            size: '40dp', '40dp'
+            pos_hint: {'center_y': 0.5}
+            background_normal: ''
+            background_color: (0, 0, 0, 0)
+            on_release: root.change_screen("settings")
+
+            Image:
+                source: app.resource_path + "\\icons\\gear-solid.png"
+                center: self.parent.center
+                size_hint: None, None
+                size: ('30dp', '30dp')
+                fit_mode: 'contain'
+           
+            
+        # Will be replaced late
+        # Button:
+        #    text: 'Settings'
+        #    on_release: screen_manager.current  = 'settings' 
+
+    
+    WindowManager:
+        id: screen_manager
+
+        DashboardScreen:
+            name: 'dashboard'
+        
+        VaultScreen:
+            name: 'vault'
+
+        LabScreen:
+            name: 'lab'
+
+        SettingsScreen:
+            name: 'settings'
+    
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        height: '60dp'
+        id: tabs
+
+        TabButton:
+            image_filename: 'house-solid.png' 
+            route: 'dashboard' 
+            is_active: True
+
+        TabButton:
+            image_filename: 'vault-solid.png' 
+            route: 'vault' 
+
+        TabButton:
+            image_filename: 'flask-solid.png' 
+            route: 'lab' 
+
+
+
+
+

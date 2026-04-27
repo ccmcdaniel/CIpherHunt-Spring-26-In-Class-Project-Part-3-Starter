@@ -1,0 +1,164 @@
+#:kivy 1.0
+#:import utils kivy.utils
+
+<TabButton>:
+    # size_hint: None, None
+    # size: 120, 100  # Adjust button size as needed
+    
+    # Remove default Kivy grey texture
+    background_normal: ''
+    background_down: '' # Prevents it from turning grey when clicked
+    
+    # Lavender Background Color (#C1C6E6)
+    background_color: utils.get_color_from_hex("#F4F4F4") if not root.is_active else utils.get_color_from_hex("#BAC0E6")
+
+    Image:
+        source: f"{app.resource_path}\\icons\\{root.image_filename}" # Replace with your actual filename
+        center: self.parent.center
+        size_hint: None, None
+        size: (root.height * 0.6, root.height * 0.6)
+        fit_mode: "contain"
+
+<TextBox>:
+    orientation: 'vertical'
+    size_hint: (1, 1 if root.is_multiline else None)
+    height: '60dp'
+
+    # 3. Custom Color and Rounded Border
+    canvas.before:
+        Color:
+            rgba: root.back_color #utils.get_color_from_hex("#D9D9D9") # Your custom color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [3,]  # Adjust for roundness
+
+    TextInput:
+        hint_text: root.hint_text
+        text: root.text
+        font_size: '24sp'
+        multiline: root.is_multiline
+        on_text: root.text = self.text
+
+        # 1. Center the text
+        halign: 'left' if root.is_multiline else 'center'
+        padding: [5] if root.is_multiline else [5, (self.height - self.line_height) / 2, 5, 5]
+
+        # 2. Remove default background images
+        background_active: ''
+        background_normal: ''
+        background_color: 0, 0, 0, 0  # Make default background transparent
+        cursor_color: utils.get_color_from_hex("#000000")
+        foreground_color: utils.get_color_from_hex("#000000")
+
+
+<AppButton>:
+    size_hint: (1, None)
+    height: '60dp'
+    font_size: '28sp'
+
+    background_normal: ''
+    background_color: (0, 0, 0, 0)
+
+    canvas.before:
+        Color:
+            rgba: root.color_normal if self.state == 'normal' else root.color_pressed
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+
+<ArrowButton>:
+    size_hint: (None, None)
+    size: '87dp', '87dp'
+    pos_hint: {'center_y': 0.5}
+    background_normal: ''
+    background_color: (0, 0, 0, 0)
+
+    Image:
+        source: app.resource_path + "\\icons\\arrow-left-solid.png" if root.is_left else app.resource_path + "\\icons\\arrow-right-solid.png"
+        center: self.parent.center
+        size_hint: None, None
+        size: ('87dp', '87dp')
+        fit_mode: 'contain'
+
+<ContentBox>:
+    orientation: 'vertical'
+
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex("#3D527B")
+
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [11]
+
+    Label:
+        text: root.title_text
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.size
+        markup: True
+        size_hint: (1, None)
+        height: '74dp'
+        color: utils.get_color_from_hex("#ffffff")
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: (1, None)
+        height: '8dp'
+
+        canvas.before:
+            Color:
+                rgba: utils.get_color_from_hex("#8C8C8C")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+
+<AppToggle@ToggleButton>:
+    background_normal: ''
+    background_color: (0, 0, 0, 0)
+
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex("#848484")
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [8]
+        Color:
+            rgba: utils.get_color_from_hex("#000000") if self.state == 'normal' else utils.get_color_from_hex("#65B5D8")
+        RoundedRectangle:
+            size: (self.height, self.height)
+            pos: (self.x  if self.state == 'normal' else self.x + self.width - self.height, self.y)
+            radius: [8]
+
+
+<CheckmarkBox>:
+    # 1. HIDE THE DEFAULT GRAPHICS
+    # This makes the internal CheckBox images transparent
+    color: (1, 1, 1, 0) 
+    
+    # 2. DIMENSIONS
+    size_hint: None, None
+    size: dp(110), dp(58)
+
+    canvas.before:
+        # Draw the custom rounded rectangle
+        Color:
+            rgba: root.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(8)]
+
+        # Draw your custom checkmark icon
+        Color:
+            rgba: (1, 1, 1, 1 if self.active else 0)
+        Rectangle:
+            source: app.resource_path + f"\\icons\\{root.checkmark_name}"
+            # Scale icon to 60% of widget height
+            size: (self.height * 0.6, self.height * 0.6)
+            # Center the icon manually
+            pos: (self.center_x - (self.height * 0.6) / 2, self.center_y - (self.height * 0.6) / 2)
