@@ -17,6 +17,7 @@ class ClueModel:
         self.GenerateClues()
         self.FetchNewClue()
 
+    # Instructor Completes this
     def GenerateClues(self):
         sample_clues = [
             [
@@ -58,11 +59,11 @@ class ClueModel:
 
         self.__current_clue_index = -1
 
-
+    # Instructor Completes This
     def GetCurrentClue(self):
         return self.__clue_data[self.__current_clue_index]
 
-
+    # Instructor Completes This
     def FetchNewClue(self):
         result = random.randint(0, len(self.__clue_data) - 1)
 
@@ -70,18 +71,18 @@ class ClueModel:
             result = random.randint(0, len(self.__clue_data) - 1)
         return self.__clue_data[result]
 
-
+    # Instructor Completes This
     def GetClueUsername(self):
         return "guest"
 
-
+    # Student Completes This
     def AddClue(self, clue_text, key, user_id):
         clue_obj = Clue(self.__id_counter, user_id, clue_text, key, datetime.now(), False)
         self.__clue_data.append(clue_obj)
         self.__id_counter += 1
         return True
 
-
+    # Student Completes This 
     def AttemptCurrentClueSolve(self, key):
         if(key == self.__clue_data[self.__current_clue_index].key):
             self.__clue_data[self.__current_clue_index].is_solved = True

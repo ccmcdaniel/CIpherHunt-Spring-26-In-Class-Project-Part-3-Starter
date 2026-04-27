@@ -23,14 +23,17 @@ class UserModel:
     def rank(self):
         return self.__rank
 
+    # Instructor Completes This
     def UpdateUsername(self, new_username):
         self.__username = new_username
         return True
-        
+    
+    # Instructor Completes This
     def UpdateEmail(self, new_email):
         self.__email = new_email
         return True
-        
+    
+    # Student Completes This
     def IncreasePoints(self, amount):
         if(amount <= 0):
             return
